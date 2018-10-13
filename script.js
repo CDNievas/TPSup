@@ -130,7 +130,7 @@ function printError(msg){
 
 function exit(status){
 	if (typeof status === 'string') {
-		alert(status);
+		printError(status);
 	}
 	throw '';
 }
