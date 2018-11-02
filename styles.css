@@ -1,16 +1,32 @@
-*{
-	margin:0;
-	padding:0;
+* {
+    margin: 0;
+    padding: 0;
 }
 
-body{
-	background-color:#10AFE6;
+body {
+    background-color: #10AFE6;
 }
 
-div.body{
-	width:920px;
-	height:600px;
-	margin:20 auto;
-	display:block;
-	background:#F1F1F1;
+div.body {
+    width: 80vw;
+    height: 80vh;
+    margin-left: 10vw;
+    margin-top: 10vh;
+    background: #F1F1F1;
+}
+
+fieldset {
+    margin: 0.4rem;
+    padding: 0.4rem;
+}
+
+legend {
+    padding: 0.2rem 0.4rem;
+    background-color: black;
+    color: white;
+}
+
+button {
+    float: right;
+    margin-right: 0.4rem;
 }

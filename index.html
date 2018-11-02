@@ -2,18 +2,31 @@
 	<head>
 		<title>TP Superior 2018</title>
 		<link rel="stylesheet" type="text/css" href="./styles.css">
-		<script type="text/javascript" src="./script.js"></script>
+		<script type="text/javascript" src="js/fileLoader.js"></script>
 		<script src="./deps/decimal.min.js"></script>
 
 	</head>
 	<body>
-
 		<div class="body">
 
 			<label for="archivo">Archivo CSV</label><br>
 			<input type="file" id="archivo" name="archivo" accept=".csv"/><br>
-			<input type="radio" name="metodo" value="jacobi"/ checked> Método de Jacobi<br>
-			<input type="radio" name="metodo" value="gaussSeidel"/> Método de Gauss Seidel<br>
+
+            <fieldset class="fields">
+
+				<legend>Elegir método de resolución</legend>
+
+				<div>
+                    <input id="metodo_jacobi" type="radio" name="metodo" value="jacobi" checked/>
+                    <label for="metodo_jacobi">Método de Jacobi</label>
+                </div>
+
+				<div>
+					<input id="metodo_gauss" type="radio" name="metodo" value="gaussSeidel"/>
+					<label for="metodo_gauss">Método de Gauss Seidel</label>
+				</div>
+
+            </fieldset>
 			<button onclick="submit()">Resolver</button>
 
 		</div>
