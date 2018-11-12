@@ -120,7 +120,7 @@ function metodoGaussSeidel(matriz, inicial, cota, decimales) {
     while(!alcanzaCota(siguiente_valor,inicial,cota)){
         inicial = siguiente_valor;
         siguiente_valor = siguienteValorGaussSeidel(matriz,siguiente_valor);
-        console.log(siguiente_valor.toFixed(decimales));
+        console.log(siguiente_valor);
     }
 
     }
@@ -152,7 +152,7 @@ function metodoJacobi(matriz,inicial,cota,decimales) {
     while(!alcanzaCota(siguiente_valor,inicial,cota)){
         inicial = siguiente_valor;
         siguiente_valor = siguientevalor(matriz,siguiente_valor);
-        console.log(siguiente_valor.toFixed(decimales));
+        console.log(siguiente_valor);
     }
 
 }
