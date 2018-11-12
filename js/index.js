@@ -7,8 +7,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function analizarArchivo(event) {
-    procesarArchivo(event.target.files[0], function(datos) {
+    reiniciarPantalla();
+
+    procesarArchivo(event.target.files[0], function(datos) {      
         crearDisplay(datos);
+        
+        if (esDiagonalmenteDominante(datos)) {
+            document.getElementById("seleccionar_metodo").disabled = false;
+            document.getElementById("c_incognitas").value = datos.incognitas.length;
+        } else {
+            document.getElementById("matriz_no_diagonal").style.display = 'block';
+            document.getElementById("seleccionar_metodo").disabled = true;
+        }
 
         console.log(datos);
     })
@@ -17,7 +27,6 @@ function analizarArchivo(event) {
 
 function crearDisplay(datos) {
     let table = document.getElementById('table_matriz');
-
 
     if (table === null) {
         table = document.createElement('table');
@@ -42,5 +51,26 @@ function crearDisplay(datos) {
     const elementoPadre = document.getElementById('body');
 
     elementoPadre.insertBefore(table, elementoElegirMetodo);
+}
 
+function desplegarOpciones() {
+    generarIniciales();
+    document.getElementById("fieldset_opciones").style.display = 'block';
+}
+
+function reiniciarPantalla() {
+    document.getElementById("matriz_no_diagonal").style.display = 'none';
+    document.getElementById("fieldset_opciones").style.display = 'none';
+}
+
+function generarIniciales(){
+    let father = document.getElementById("v_inicial");
+    let incognitas = document.getElementById("c_incognitas").value;
+    for (let i = 0; i < incognitas; i++) {
+        let input = document.createElement('input');
+        input.name = "position";
+        input.type = "text";
+        input.className = "cifra";
+        father.appendChild(input);
+    }
 }

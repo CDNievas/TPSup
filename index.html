@@ -17,6 +17,12 @@
 			<label for="archivo">Archivo CSV</label><br>
 			<input type="file" id="archivo" name="archivo" accept=".csv"/><br>
 
+			<label id="matriz_no_diagonal" style='display:none' class="noDominante">
+				La matriz no es diagonalmente dominante, por favor, introduzca una nueva matriz
+			</label>
+
+			<input id='c_incognitas' style='display:none'>
+			
             <fieldset id="fieldset_metodo">
 
 				<legend>Elegir método de resolución</legend>
@@ -32,7 +38,29 @@
 				</div>
 
             </fieldset>
-			<button onclick="submit()">Resolver</button>
+			<button id='seleccionar_metodo' onclick="desplegarOpciones()" disabled>Seleccionar Metodo</button></br>
+			
+			<div id="fieldset_opciones" style='display:none;'>
+				<fieldset>
+
+					<legend>Opciones</legend>
+
+					<div>
+					<label id="v_inicial">Vector inicial  = </div>
+					<br>
+					<div>
+					<label>Cantidad de decimales: </label>
+						<input id="decimales" class="cifra">
+					</div>
+					<br>
+					<div>	
+					<label>Cota de error: </label>
+						<input id="cota_error" class="cifra">
+					</div>
+
+				</fieldset>
+				<button onclick="submit()">Comenzar</button></br>
+			</div>
 
 		</div>
 

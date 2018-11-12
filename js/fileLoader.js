@@ -14,6 +14,11 @@ function procesarSubmit() {
     // Checkeo
     var metodo = document.querySelector('input[name="metodo"]:checked').value;
     var archivo = document.getElementById("archivo").files;
+    // No se si usar 'var' o 'let', uso let por costumbre
+    let inicial = document.getElementsByName("position");
+    let cota = document.getElementById("cota_error").value;
+    let decimales = document.getElementById("decimales").value;
+
 
     if (metodo !== "jacobi" && metodo !== "gaussSeidel") {
         printError("No selecciono un metodo valido");
@@ -23,13 +28,11 @@ function procesarSubmit() {
 
         // Procesa el archivo
         procesarArchivo(archivo[0], function (matriz) {
-            esDiagonalmenteDominante(matriz);
-
             // Ejecuta metodo/solucion
             if (metodo === "jacobi") {
-                metodoJacobi(matrices);
+                metodoJacobi(matriz,getVectorInicial(inicial),cota,decimales);
             } else {
-                metodoGaussSeidel(matrices);
+                metodoGaussSeidel(matriz,inicial,cota,decimales);
             }
 
         });
@@ -110,12 +113,33 @@ function parserCSV(csv) {
 }
 
 
-function metodoGaussSeidel(matrices) {
+function metodoGaussSeidel(matrices,inicial,cota,decimales) {
     //TODO: Algoritmo
 }
 
-function metodoJacobi(matrices) {
-    //TODO: Algoritmo
+function metodoJacobi(matriz,inicial,cota,decimales) {
+
+    let siguiente_valor = siguientevalor(matriz,inicial);
+
+    while(!alcanzaCota(siguiente_valor,inicial,cota)){
+        inicial = siguiente_valor;
+        siguiente_valor = siguientevalor(matriz,siguiente_valor);
+        console.log(siguiente_valor);
+    }
+
+}
+
+function siguientevalor(matriz,valor){
+    let siguiente = new Array(valor);
+    let suma = 0;
+    for (let i = 0 ; i < matriz.coeficientes.length ; i++){
+        for(let j = 0 ; j < matriz.coeficientes.length ; j++){
+           if(i!=j){suma -= new Decimal(matriz.coeficientes[i][j])*valor[j];}
+        }
+        siguiente[i]=(suma + new Decimal(matriz.terminosIndependientes[i]))/new Decimal(matriz.coeficientes[i][i]);
+        suma=0;
+    }
+    return siguiente;
 }
 
 function printError(msg) {
@@ -128,4 +152,20 @@ function exit(status) {
         printError(status);
     }
     throw '';
+}
+
+function getVectorInicial(value){
+    let result = new Array();
+    for (let i = 0 ; i < value.length ; i++){
+        result[i]=value[i].value;
+    }
+    return result;
+}
+
+function alcanzaCota(a,b,c){
+    let d = diferenciaVectorial(a,b);
+    var y = 0, i = d.length;
+    while (i--) y += d[i] * d[i];
+    return Math.sqrt(y) < new Decimal(c);
+
 }
