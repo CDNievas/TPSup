@@ -129,7 +129,7 @@ function siguienteValorGaussSeidel(matriz, inicial) {
 
     let iterativo = new Array(inicial);
 
-    let tempX = iterativo[0].slice();
+    let tempX = iterativo.slice();
 
     for (var i=0 ; i<matriz.length ; i++) {
         tempX[i] = inicial[i];
@@ -139,7 +139,7 @@ function siguienteValorGaussSeidel(matriz, inicial) {
         tempX[i] /= matriz[i][i];
     }
 
-    this.valoresX.unshift(tempX.slice());
+    iterativo.unshift(tempX.slice());
 
     return iterativo;
 
