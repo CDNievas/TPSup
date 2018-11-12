@@ -113,8 +113,36 @@ function parserCSV(csv) {
 }
 
 
-function metodoGaussSeidel(matrices,inicial,cota,decimales) {
-    //TODO: Algoritmo
+function metodoGaussSeidel(matriz, inicial, cota, decimales) {
+
+    let siguiente_valor = siguienteValorGaussSeidel(matriz,inicial);
+
+    while(!alcanzaCota(siguiente_valor,inicial,cota)){
+        inicial = siguiente_valor;
+        siguiente_valor = siguienteValorGaussSeidel(matriz,siguiente_valor);
+        console.log(siguiente_valor.toFixed(decimales));
+    }
+
+    }
+
+function siguienteValorGaussSeidel(matriz, inicial) {
+
+    let iterativo = new Array(inicial);
+
+    let tempX = iterativo[0].slice();
+
+    for (var i=0 ; i<matriz.length ; i++) {
+        tempX[i] = inicial[i];
+        for (var j=0 ; j<matriz.length ; j++) {
+            if (j !== i) tempX[i] -= (matriz[i][j] * tempX[j]);
+        }
+        tempX[i] /= matriz[i][i];
+    }
+
+    this.valoresX.unshift(tempX.slice());
+
+    return iterativo;
+
 }
 
 function metodoJacobi(matriz,inicial,cota,decimales) {
@@ -124,7 +152,7 @@ function metodoJacobi(matriz,inicial,cota,decimales) {
     while(!alcanzaCota(siguiente_valor,inicial,cota)){
         inicial = siguiente_valor;
         siguiente_valor = siguientevalor(matriz,siguiente_valor);
-        console.log(siguiente_valor);
+        console.log(siguiente_valor.toFixed(decimales));
     }
 
 }
