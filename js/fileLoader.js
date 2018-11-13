@@ -128,21 +128,16 @@ function metodoGaussSeidel(matriz, inicial, cota, decimales) {
 function siguienteValorGaussSeidel(matriz, inicial) {
 
     let iterativo = new Array(inicial);
+    let suma = 0;
 
-    let tempX = iterativo.slice();
-
-    for (var i=0 ; i<matriz.length ; i++) {
-        tempX[i] = inicial[i];
-        for (var j=0 ; j<matriz.length ; j++) {
-            if (j !== i) tempX[i] -= (matriz[i][j] * tempX[j]);
+    for (let i=0 ; i<matriz.length ; i++) {
+        iterativo[i] = inicial[i];
+        for (let j=0 ; j<matriz.length ; j++) {
+            if (j !== i) iterativo[i] -= (matriz[i][j] * iterativo[j]);
         }
-        tempX[i] /= matriz[i][i];
+        iterativo[i] /= matriz[i][i];
     }
-
-    iterativo.unshift(tempX.slice());
-
     return iterativo;
-
 }
 
 function metodoJacobi(matriz,inicial,cota,decimales) {
