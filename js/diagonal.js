@@ -19,9 +19,6 @@ function esDiagonalmenteDominante(matriz) {
         }
     }
 
-    if (esDominante) {
-        console.log("es dominante")
-    } else {
-        console.log("no es dominante")
-    }
+    return esDominante;
+
 }
