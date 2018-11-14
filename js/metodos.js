@@ -49,6 +49,17 @@ function convertirVectorConDecimales(vector, decimales) {
 	return resultado;
 }
 
+function convertirMatriz(matriz) {
+	var result = new Array(matriz.length);
+	for(let i = 0; i < matriz.length; i++) {
+		result[i] = new Array (matriz[0].length);
+		for(let j = 0; j < matriz[0].length; j++) {
+			result[i][j] = matriz[i][j].toNumber();
+		}
+	}
+	return result;
+}
+
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
 
     let siguiente_valor = siguienteValorGaussSeidel(matriz,inicial);

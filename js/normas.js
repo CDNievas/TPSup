@@ -48,18 +48,20 @@ function diferenciaVectorial(vector1,vector0){
     return resultado;
 }
 
-function getMaxOfArray(numArray) {
-    return Math.max.apply(null, numArray);
-  }
+  function maxDeVector(vector) {
+	let result = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		result = Decimal.max(result, new Decimal(vector[i])).toNumber();
+	}
+	return result;
+}
 
-function normaDos(matriz) {
-    const coeficientes = matriz.coeficientes;
+  function normaDos(coeficientes) {
+    var matricesMult = multiplicarMatrizPorMatriz(transpuesta(coeficientes), coeficientes);
 
-    var matricesMult = multiplicaMatrizPorMatriz(transpuesta(coeficientes), coeficientes);
+    var autovalorMaximo = maxDeVector((numeric.eig(convertirMatriz(matricesMult))).lambda.x);
 
-    var autovalorMaximo = new numeric(getMaxOfArray(numeric.eig(coeficientes)).lambda);
-
-    var resultado = new Decimal.sqrt(new Decimal(autovalorMaximo).times(matricesMult));
-
-    return resultado.valueOf();
+    var resultado = Math.sqrt(autovalorMaximo);
+	
+	return resultado;
 }
