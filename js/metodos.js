@@ -11,7 +11,7 @@ function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
     const coeficientes = matriz.coeficientes;
     const termInd = matriz.termInd;
 
-    const inversaInferior = (numeric.inv(diagonalConTriangularInferior(coeficientes)));
+    const inversaInferior = numeric.inv(convertirMatriz(diagonalConTriangularInferior(coeficientes)));
      
     const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, triangularSuperior(coeficientes));
     const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
@@ -41,23 +41,23 @@ function alcanzaCotaDecimal(sig, actual, cota){
 }
 
 function convertirVectorConDecimales(vector, decimales) {
-	let resultado = new Array(vector.length);
-	
-	for (let i = 0; i < vector.length; i++) {
-		resultado[i] = parseFloat(vector[i].toFixed(decimales));
-	}
-	return resultado;
-}
+    let resultado = new Array(vector.length);
+    
+    for (let i = 0; i < vector.length; i++) {
+        resultado[i] = parseFloat(vector[i].toFixed(decimales));
+    }
+    return resultado;
+    }
 
 function convertirMatriz(matriz) {
-	var result = new Array(matriz.length);
-	for(let i = 0; i < matriz.length; i++) {
-		result[i] = new Array (matriz[0].length);
-		for(let j = 0; j < matriz[0].length; j++) {
-			result[i][j] = matriz[i][j].toNumber();
-		}
-	}
-	return result;
+    var result = new Array(matriz.length);
+    for(let i = 0; i < matriz.length; i++) {
+        result[i] = new Array (matriz[0].length);
+        for(let j = 0; j < matriz[0].length; j++) {
+            result[i][j] = matriz[i][j].toNumber();
+        }
+    }
+    return result;
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
