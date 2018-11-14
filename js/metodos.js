@@ -14,18 +14,18 @@ function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
     const inversaInferior = (numeric.inv(diagonalConTriangularInferior(coeficientes)));
      
     const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, triangularSuperior(coeficientes));
-    const C_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, termInd);
+    const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
 
     iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
 }
 
 function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo)
 {
-    let siguiente_valor = siguienteValorAlternativo(inicial, T_Metodo, C_Metodo);
+    let siguiente_valor = siguienteValorDecimal(inicial, T_Metodo, C_Metodo);
 
     while(!alcanzaCotaDecimal(siguiente_valor, inicial, cota)) {
         inicial = siguiente_valor;
-        siguiente_valor = siguienteValorAlternativo(siguiente_valor, T_Metodo, C_Metodo);
+        siguiente_valor = siguienteValorDecimal(siguiente_valor, T_Metodo, C_Metodo);
         console.log(convertirVectorConDecimales(siguiente_valor, decimales));
     }
 }
@@ -37,14 +37,14 @@ function siguienteValorDecimal(valor, T_Metodo, C_Metodo)
 
 function alcanzaCotaDecimal(sig, actual, cota){
     let d = diferenciaVectorialDecimal(sig, actual);
-    return normaDosVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
+    return normaVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
 }
 
 function convertirVectorConDecimales(vector, decimales) {
 	let resultado = new Array(vector.length);
 	
 	for (let i = 0; i < vector.length; i++) {
-		resultado[i] = vector[i].toFixed(decimales);
+		resultado[i] = parseFloat(vector[i].toFixed(decimales));
 	}
 	return resultado;
 }
