@@ -1,6 +1,26 @@
-function metodoJacobi(matrices) {
-	
+function metodoJacobiAlternativo(matrices) {
+    const coeficientes = matriz.coeficientes;
+    const termInd = matriz.termInd;
+
+    const triangulares = sumarMatrices(menosTriangularInferior(coeficientes), menosTriangularSuperior(coeficientes));
+    const diagonalInversa = inversa(diagonal(coeficientes));
+    const T_Jacobi = multiplicaMatrizPorMatriz(diagonalInversa, triangulares);
+    const C_Jacobi = multiplicaMatrizPorVector(diagonalInversa, termInd);
+
+    let siguiente_valor = siguienteValor(inicial);
+
+    while(!alcanzaCota(siguiente_valor, inicial, cota)) {
+        inicial = siguiente_valor;
+        siguienteValor = siguienteValorAlternativo(siguienteValor);
+        console.log(siguienteValor);
+    }
 }
+
+function siguienteValorAlternativo(valor)
+{
+    return sumarMatrices(multiplicarMatrizPorVector(T_Jacobi, valor), C_Jacobi);
+}
+
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
 
