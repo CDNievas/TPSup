@@ -1,4 +1,4 @@
-function multiplicaMatrizPorMatriz(matriz1, matriz2) {
+function multiplicarMatrizPorMatriz(matriz1, matriz2) {
 	var result = new Array(matriz1.length);
 	
 	for (let i = 0; i < matriz1.length; i++) {
