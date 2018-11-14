@@ -45,7 +45,7 @@ function diferenciaVectorial(vector1,vector0){
         }
     }
 
-    return resultado
+    return resultado;
 }
 
 function getMaxOfArray(numArray) {

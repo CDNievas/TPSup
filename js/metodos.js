@@ -1,9 +1,7 @@
-function metodoJacobiAlternativo(matriz, inicial, cota, decimales) {
-    const coeficientes = matriz.coeficientes;
-    const termInd = matriz.termInd;
+function metodoJacobiAlternativo(matriz, termInd, inicial, cota, decimales) {
 
-    const T_Jacobi = multiplicaMatrizPorMatriz(inversaDiagonal(coeficientes, menosTriangulares(coeficientes)));
-    const C_Jacobi = multiplicaMatrizPorVector(inversaDiagonal(coeficientes, termInd));
+    const T_Jacobi = multiplicaMatrizPorMatriz(inversaDiagonal(matriz), menosTriangulares(matriz));
+    const C_Jacobi = multiplicaMatrizPorVector(inversaDiagonal(matriz), termInd);
 
     iterarValores(inicial, cota, decimales, T_Jacobi, C_Jacobi);
 }
@@ -22,7 +20,7 @@ function metodoGaussSeidelAlternativo(matriz, inicial, cota, decimales) {
 
 function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo)
 {
-    let siguiente_valor = siguienteValorAlternativo(inicial, T_Jacobi, C_Jacobi);
+    let siguiente_valor = siguienteValorAlternativo(inicial, T_Metodo, C_Metodo);
 
     while(!alcanzaCota(siguiente_valor, inicial, cota)) {
         inicial = siguiente_valor;
@@ -33,7 +31,7 @@ function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo)
 
 function siguienteValorAlternativo(valor, T_Metodo, C_Metodo)
 {
-    return sumarMatrices(multiplicarMatrizPorVector(T_Metodo, valor), C_Metodo);
+    return sumarMatrices(multiplicaMatrizPorVector(T_Metodo, valor), C_Metodo);
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
