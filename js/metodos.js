@@ -5,7 +5,7 @@ function metodoJacobiAlternativo(matriz, inicial, cota, decimales) {
     const T_Jacobi = multiplicaMatrizPorMatriz(inversaDiagonal(coeficientes, menosTriangulares(coeficientes)));
     const C_Jacobi = multiplicaMatrizPorVector(inversaDiagonal(coeficientes, termInd));
 
-    iterarValores(inicial, cota, decimales, T_Jacobi, C_GaussSeidel);
+    iterarValores(inicial, cota, decimales, T_Jacobi, C_Jacobi);
 }
 
 function metodoGaussSeidelAlternativo(matriz, inicial, cota, decimales) {
