@@ -11,13 +11,13 @@ function multiplicarMatrizPorMatriz(matriz1, matriz2) {
 			    suma = suma.plus(new Decimal (matriz1[i][k]).times(new Decimal (matriz2[k][j])));
             }
             
-			result[i][j] = parseFloat(suma.valueOf());
+			result[i][j] = suma;
 		}
 	}
 	return result;
 }
 
-function multiplicaMatrizPorVector(matriz, vector) {
+function multiplicarMatrizPorVector(matriz, vector) {
     var result = new Array(matriz.length);
 	
     for (let i = 0; i < result.length; i++) {
@@ -26,7 +26,7 @@ function multiplicaMatrizPorVector(matriz, vector) {
         for(let j = 0; j < result.length; j++) {
             suma = suma.plus(new Decimal(matriz[i][j]).times(new Decimal(vector[j])));
 		}
-        result[i] = parseFloat(suma.valueOf());
+        result[i] = suma;
     }
     return result;
 }
@@ -38,8 +38,8 @@ function transpuesta(matriz) {
         result[i] = new Array(matriz[0].length);
 
         for (let j = 0; j < matriz[0].length; j++) {
-            if (i == j) result[i][j] = matriz [i][j];
-            else result[i][j] = matriz [j][i];
+            if (i == j) result[i][j] = new Decimal (matriz [i][j]);
+            else result[i][j] = new Decimal(matriz [j][i]);
         }
     }
     return result;
@@ -50,8 +50,8 @@ function diagonalConTriangularInferior(matriz) {
      for(let i = 0; i < matriz.length; i++) {
         resultado[i] = new Array(matriz[0].length);
          for(let j = 0; j < matriz[0].length; j++) {
-            if (i >= j) resultado[i][j] = matriz[i][j];
-            else resultado[i][j] = 0;
+            if (i >= j) resultado[i][j] = new Decimal(matriz[i][j]);
+            else resultado[i][j] = new Decimal(0);
         }
     }
 	return resultado;
@@ -64,8 +64,8 @@ function inversaDiagonal(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i === j) resultado[i][j] = parseFloat((new Decimal(1).div(new Decimal(matriz[i][j]))).valueOf());
-            else resultado[i][j] = 0;
+            if (i === j) resultado[i][j] = new Decimal(1).div(new Decimal(matriz[i][j]));
+            else resultado[i][j] = new Decimal(0);
         }
     }
 	return resultado;
@@ -78,8 +78,8 @@ function triangularSuperior(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i >= j) resultado[i][j] = 0;
-            else resultado[i][j] = matriz[i][j];
+            if (i >= j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]);
         }
     }
 	return resultado;
@@ -92,8 +92,8 @@ function menosTriangulares(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i === j) resultado[i][j] = 0;
-            else resultado[i][j] = parseFloat((new Decimal(matriz[i][j]).negated()).valueOf());
+            if (i === j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]).negated();
         }
     }
 	return resultado;
@@ -106,13 +106,12 @@ function sumarMatrices(m1, m2) {
         resultado[i] = new Array(m1[0].length);
 
         for(let j = 0; j < m1[0].length; j++) {
-			resultado[i][j] = parseFloat((new Decimal(new Decimal(m1[i][j]).plus(new Decimal(m2[i][j])))).valueOf());
+			resultado[i][j] = new Decimal(m1[i][j]).plus(new Decimal(m2[i][j]));
         }
     }
 	return resultado;
 }
 
-// Estas de aca ya no se usan, las dejo por amor al arte
 function menosTriangularSuperior(matriz) {
     var resultado = new Array(matriz.length);
 
@@ -120,8 +119,8 @@ function menosTriangularSuperior(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i >= j) resultado[i][j] = 0;
-            else resultado[i][j] = parseFloat((new Decimal(matriz[i][j]).negated()).valueOf());
+            if (i >= j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]).negated();
         }
     }
 	return resultado;
@@ -134,8 +133,8 @@ function menosTriangularInferior(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i <= j) resultado[i][j] = 0;
-            else resultado[i][j] = parseFloat((new Decimal(matriz[i][j]).negated()).valueOf());
+            if (i <= j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]).negated();
         }
     }
 	return resultado;
@@ -148,9 +147,40 @@ function triangularInferior(matriz) {
         resultado[i] = new Array(matriz[0].length);
 
         for(let j = 0; j < matriz[0].length; j++) {
-            if (i <= j) resultado[i][j] = 0;
-            else resultado[i][j] = matriz[i][j];
+            if (i <= j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]);
         }
     }
 	return resultado;
+}
+
+function diferenciaVectorialDecimal(vector1,vector0){
+    let resultado = new Array();
+
+    if(vector0.length === vector1.length){
+        for(let i = 0; i < vector1.length; i++) {
+           resultado[i]= new Decimal(vector1[i]).minus(new Decimal(vector0[i]));
+        }
+    }
+    return resultado;
+}
+
+function normaVectorialDecimal(vector) {
+	var suma = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		suma = suma.plus(new Decimal(vector[i]).toPower(2))
+	}
+	
+	return Decimal.sqrt(suma);
+}
+
+function sumarVectores(vector1,vector0){
+    let resultado = new Array();
+
+    if(vector0.length === vector1.length){
+        for(let i = 0; i < vector1.length; i++) {
+           resultado[i]= new Decimal(vector1[i]).plus(new Decimal(vector0[i]));
+        }
+    }
+    return resultado;
 }

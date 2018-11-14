@@ -1,19 +1,20 @@
-function metodoJacobiAlternativo(matriz, termInd, inicial, cota, decimales) {
-
-    const T_Jacobi = multiplicaMatrizPorMatriz(inversaDiagonal(matriz), menosTriangulares(matriz));
-    const C_Jacobi = multiplicaMatrizPorVector(inversaDiagonal(matriz), termInd);
+function metodoJacobiConDecimal(matriz, inicial, cota, decimales) {
+	const coeficientes = matriz.coeficientes;
+	const termInd = matriz.termInd;
+    const T_Jacobi = multiplicarMatrizPorMatriz(inversaDiagonal(coeficientes), menosTriangulares(coeficientes));
+    const C_Jacobi = multiplicarMatrizPorVector(inversaDiagonal(coeficientes), termInd);
 
     iterarValores(inicial, cota, decimales, T_Jacobi, C_Jacobi);
 }
 
-function metodoGaussSeidelAlternativo(matriz, inicial, cota, decimales) {
+function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
     const coeficientes = matriz.coeficientes;
     const termInd = matriz.termInd;
 
     const inversaInferior = (numeric.inv(diagonalConTriangularInferior(coeficientes)));
      
-    const T_GaussSeidel = multiplicaMatrizPorMatriz(inversaInferior, triangularSuperior(coeficientes)); 
-    const C_GaussSeidel = multiplicaMatrizPorMatriz(inversaInferior, termInd);
+    const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, triangularSuperior(coeficientes));
+    const C_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, termInd);
 
     iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
 }
@@ -22,16 +23,30 @@ function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo)
 {
     let siguiente_valor = siguienteValorAlternativo(inicial, T_Metodo, C_Metodo);
 
-    while(!alcanzaCota(siguiente_valor, inicial, cota)) {
+    while(!alcanzaCotaDecimal(siguiente_valor, inicial, cota)) {
         inicial = siguiente_valor;
-        siguienteValor = siguienteValorAlternativo(siguienteValor);
-        console.log(siguienteValor);
+        siguiente_valor = siguienteValorAlternativo(siguiente_valor, T_Metodo, C_Metodo);
+        console.log(convertirVectorConDecimales(siguiente_valor, decimales));
     }
 }
 
-function siguienteValorAlternativo(valor, T_Metodo, C_Metodo)
+function siguienteValorDecimal(valor, T_Metodo, C_Metodo)
 {
-    return sumarMatrices(multiplicaMatrizPorVector(T_Metodo, valor), C_Metodo);
+    return sumarVectores(multiplicarMatrizPorVector(T_Metodo, valor), C_Metodo);
+}
+
+function alcanzaCotaDecimal(sig, actual, cota){
+    let d = diferenciaVectorialDecimal(sig, actual);
+    return normaDosVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
+}
+
+function convertirVectorConDecimales(vector, decimales) {
+	let resultado = new Array(vector.length);
+	
+	for (let i = 0; i < vector.length; i++) {
+		resultado[i] = vector[i].toFixed(decimales);
+	}
+	return resultado;
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
