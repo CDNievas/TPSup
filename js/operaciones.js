@@ -45,6 +45,18 @@ function transpuesta(matriz) {
     return result;
 }
 
+function diagonalConTriangularInferior(matriz) {
+    var resultado = new Array(matriz.length);
+     for(let i = 0; i < matriz.length; i++) {
+        resultado[i] = new Array(matriz[0].length);
+         for(let j = 0; j < matriz[0].length; j++) {
+            if (i >= j) resultado[i][j] = matriz[i][j];
+            else resultado[i][j] = 0;
+        }
+    }
+	return resultado;
+}
+
 function inversaDiagonal(matriz) {
     var resultado = new Array(matriz.length);
 
