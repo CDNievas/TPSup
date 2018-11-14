@@ -1,4 +1,4 @@
-function normaInfinito(matriz) {
+function normaInfinito(coeficientes) {
 	const coeficientes = matriz.coeficientes;
 
     let resultado = new Decimal(0);
@@ -12,10 +12,10 @@ function normaInfinito(matriz) {
 		resultado = Decimal.max(resultado, sumaFila);
     }
 	
-    return resultado;
+    return resultado.valueOf();
 }
 
-function normaUno(matriz) {
+function normaUno(coeficientes) {
 	const coeficientes = matriz.coeficientes;
 
     let resultado = new Decimal(0);
@@ -29,7 +29,7 @@ function normaUno(matriz) {
 		resultado = Decimal.max(resultado, sumaColumna);
     }
 	
-    return resultado;
+    return resultado.valueOf();
 }
 
 function normaVectorial(vector){
@@ -46,4 +46,20 @@ function diferenciaVectorial(vector1,vector0){
     }
 
     return resultado
+}
+
+function getMaxOfArray(numArray) {
+    return Math.max.apply(null, numArray);
+  }
+
+function normaDos(matriz) {
+    const coeficientes = matriz.coeficientes;
+
+    var matricesMult = multiplicaMatrizPorMatriz(transpuesta(coeficientes), coeficientes);
+
+    var autovalorMaximo = new numeric(getMaxOfArray(numeric.eig(coeficientes)).lambda);
+
+    var resultado = new Decimal.sqrt(new Decimal(autovalorMaximo).times(matricesMult));
+
+    return resultado.valueOf();
 }
