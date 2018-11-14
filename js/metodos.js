@@ -74,17 +74,19 @@ function metodoGaussSeidel(matriz, inicial, cota, decimales) {
 
 function siguienteValorGaussSeidel(matriz, inicial) {
 
-    let iterativo = new Array(inicial);
-    let suma = 0;
+    let iterativo = [];
+    iterativo.unshift(inicial.slice());
+    let aux = iterativo[0].slice();
 
-    for (let i=0 ; i<matriz.length ; i++) {
-        iterativo[i] = inicial[i];
-        for (let j=0 ; j<matriz.length ; j++) {
-            if (j !== i) iterativo[i] -= (matriz[i][j] * iterativo[j]);
+        for (let i=0 ; i<matriz.length ; i++) {
+            aux[i] = matriz.termInd[i];
+            for (let j=0 ; j<matriz.length ; j++) {
+                if (j !== i) aux[i] -=  new Decimal(matriz[i][j]) * aux[j];
+            }
+            aux[i] /= matriz[i][i];
         }
-        iterativo[i] /= matriz[i][i];
-    }
-    return iterativo;
+        iterativo.unshift(aux.slice());
+        return iterativo;
 }
 
 function metodoJacobi(matriz,inicial,cota,decimales) {
