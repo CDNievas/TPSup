@@ -2,12 +2,12 @@ function metodoJacobiAlternativo(matrices) {
     const coeficientes = matriz.coeficientes;
     const termInd = matriz.termInd;
 
-    const triangulares = sumarMatrices(menosTriangularInferior(coeficientes), menosTriangularSuperior(coeficientes));
-    const diagonalInversa = inversa(diagonal(coeficientes));
+    const triangulares = menosTriangulares(coeficientes);
+    const diagonalInversa = inversaDiagonal(coeficientes);
     const T_Jacobi = multiplicaMatrizPorMatriz(diagonalInversa, triangulares);
     const C_Jacobi = multiplicaMatrizPorVector(diagonalInversa, termInd);
 
-    let siguiente_valor = siguienteValor(inicial);
+    let siguiente_valor = siguienteValorAlternativo(inicial, T_Jacobi, C_Jacobi);
 
     while(!alcanzaCota(siguiente_valor, inicial, cota)) {
         inicial = siguiente_valor;
@@ -16,9 +16,9 @@ function metodoJacobiAlternativo(matrices) {
     }
 }
 
-function siguienteValorAlternativo(valor)
+function siguienteValorAlternativo(valor, T_Metodo, C_Metodo)
 {
-    return sumarMatrices(multiplicarMatrizPorVector(T_Jacobi, valor), C_Jacobi);
+    return sumarMatrices(multiplicarMatrizPorVector(T_Metodo, valor), C_Metodo);
 }
 
 
