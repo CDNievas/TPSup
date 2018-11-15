@@ -66,36 +66,40 @@ function convertirMatriz(matriz) {
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
+  debugger;
 
     let siguiente_valor = siguienteValorGaussSeidel(matriz,inicial);
+    siguiente_valor = siguiente_valor[0];
 
     while(!alcanzaCota(siguiente_valor,inicial,cota)){
         inicial = siguiente_valor;
         siguiente_valor = siguienteValorGaussSeidel(matriz,siguiente_valor);
+        siguiente_valor = siguiente_valor[0];
         console.log(siguiente_valor);
     }
 
     }
 
 function siguienteValorGaussSeidel(matriz, inicial) {
-
+    debugger;
     let iterativo = [];
+
     iterativo.unshift(inicial.slice());
     let aux = iterativo[0].slice();
 
-        for (let i=0 ; i<matriz.length ; i++) {
-            aux[i] = matriz.termInd[i];
-            for (let j=0 ; j<matriz.length ; j++) {
-                if (j !== i) aux[i] -=  new Decimal(matriz[i][j]) * aux[j];
-            }
-            aux[i] /= matriz[i][i];
+    for (let i = 0; i < matriz.coeficientes.length; i++) {
+        aux[i] = matriz.termInd[i];
+        for (let j = 0; j < matriz.coeficientes.length; j++) {
+            if (j !== i) aux[i] -= new Decimal(matriz.coeficientes[i][j]) * aux[j];
         }
-        iterativo.unshift(aux.slice());
-        return iterativo;
+        aux[i] /= matriz.coeficientes[i][i];
+    }
+
+    iterativo.unshift(aux.slice());
+    return iterativo;
 }
 
 function metodoJacobi(matriz,inicial,cota,decimales) {
-    debugger;
 
     let siguiente_valor = siguientevalor(matriz, inicial);
 
@@ -130,6 +134,7 @@ function getVectorInicial(value){
 }
 
 function alcanzaCota(a,b,c){
+  debugger;
     let d = diferenciaVectorial(a,b);
     var y = 0, i = d.length;
     while (i--) y += d[i] * d[i];

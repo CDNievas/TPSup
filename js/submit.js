@@ -58,7 +58,7 @@ function procesarSubmit() {
             if (metodo === "jacobi") {
                 metodoJacobi(matrices, vectInicial, cotaError, cantDec);
             } else {
-                metodoGaussSeidel(matrices);
+                metodoGaussSeidel(matrices, vectInicial, cotaError, cantDec);
             }
 
         });

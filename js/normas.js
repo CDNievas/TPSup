@@ -42,10 +42,10 @@ function normaVectorial(vector){
     return Math.hypot(vector);
 }
 
-function diferenciaVectorial(vector1,vector0){
-    let resultado = new Array();
+function diferenciaVectorial(vector1, vector0){
+    let resultado = [];
 
-    if(vector0.length===vector1.length){
+    if(vector0.length === vector1.length){
         for(let i = 0; i < vector1.length; i++) {
            resultado[i]=new Decimal(vector1[i])-new Decimal(vector0[i]);
         }
