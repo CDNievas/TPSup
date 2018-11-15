@@ -3,7 +3,7 @@ function jacobi(datos) {
 }
 
 function gaussSeidel(datos) {
-    return metodoGaussSeidel(datos.matrices, datos.inicial, datos.cota, datos.decimales);
+    return metodoGaussSeidelConDecimal(datos.matrices, datos.inicial, datos.cota, datos.decimales);
 }
 
 function metodoJacobiConDecimal(matriz, inicial, cota, decimales) {
@@ -109,17 +109,16 @@ function alcanzaCota(a, b, c) {
 // COSAS VIEJAS
 
 // TODO: eliminar?
-function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
-    const coeficientes = matriz.coeficientes;
-    const termInd = matriz.termInd;
+function metodoGaussSeidelConDecimal(coeficientes, termInd, inicial, cota, decimales) {
 
     const inversaInferior = numeric.inv(convertirMatriz(diagonalConTriangularInferior(coeficientes)));
-
-    const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, triangularSuperior(coeficientes));
+     
+    const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, menosTriangularSuperior(coeficientes));
     const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
 
     iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
 }
+
 
 // TODO: eliminar?
 function metodoJacobi(matriz, inicial, cota, decimales) {
