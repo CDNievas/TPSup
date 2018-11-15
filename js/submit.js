@@ -1,4 +1,5 @@
 let datosGlobales = null;
+
 /*
 {
     metodo,
@@ -11,22 +12,30 @@ let datosGlobales = null;
 */
 
 function submit() {
-    if (datosGlobales !== null) {
-        if (datosGlobales.metodo === 'jacobi') {
-            jacobi(datosGlobales);
-        } else if (datosGlobales.metodo === 'gaussSeidel') {
-            gaussSeidel(datosGlobales);
-        }
+    if (datosGlobales === null) return;
+
+    let iteraciones = [];
+    if (datosGlobales.metodo === 'jacobi') {
+        iteraciones = jacobi(datosGlobales);
+    } else if (datosGlobales.metodo === 'gaussSeidel') {
+        iteraciones = gaussSeidel(datosGlobales);
     }
+
+    iteraciones =
+        iteraciones.map(iteracion =>
+            iteracion.map(numero =>
+                numero.toDecimalPlaces(datosGlobales.decimales)));
+
+    crearTablaResultados(iteraciones);
 }
 
 function validar() {
-    leerDatos(function(datos) {
+    leerDatos(function (datos) {
         let matrices = datos.matrices;
 
         let normas = obtenerTodasLasNormas(matrices.coeficientes);
 
-        crearTabla(matrices);
+        crearTablaMatrizIngresada(matrices);
         mostrarNormas(normas);
         setResolvedorVisibility(true);
 
@@ -42,7 +51,7 @@ function leerDatos(callback) {
     const cantDec = document.getElementById("cantDec").value;
     const cotaError = document.getElementById("cotaError").value;
 
-    procesarArchivo(archivo[0], function(matrices) {
+    procesarArchivo(archivo[0], function (matrices) {
         const comp = comprobacionesAristocraticas(metodo, archivo, cantDec, cotaError);
 
         if (comp.codigo === -1) {
@@ -99,7 +108,7 @@ function comprobacionesAristocraticas(metodo, norma, archivo, cantDec, cotaError
 function procesarArchivo(archivo, callback) {
     if (!window.FileReader) {
         alert("Este navegador no soporta la API de FileReader. Por favor," +
-            " probar en un navegador mas moderno.")
+            " probar en un navegador mas moderno.");
 
         return;
     }
@@ -173,10 +182,7 @@ function parserCSV(csv) {
 
 }
 
-// ARREGLAR TABLA
-function crearTabla(datos) {
-
-    //v2
+function crearTablaMatrizIngresada(datos) {
     const elemPadre = document.getElementById('wrapTabla');
     let tablaMatriz = document.getElementById("tablaMatriz");
 
@@ -203,11 +209,54 @@ function crearTabla(datos) {
 
     elemPadre.appendChild(tablaMatriz);
     elemPadre.style.display = "block";
+}
+
+function crearTablaResultados(iteraciones, decimales) {
+    const elemPadre = document.getElementById('resultado');
+    let tablaResultados = document.getElementById('tablaResultados');
+
+    if (tablaResultados === null) {
+        tablaResultados = document.createElement('table');
+        tablaResultados.id = 'tablaResultados';
+        tablaResultados.classList.add('tablaMatriz');
+    } else {
+        tablaResultados.innerHTML = '';
+    }
+
+    // header
+    const head = tablaResultados.createTHead();
+    const row = head.insertRow();
+    for (let i = 0; i < iteraciones[0].length; i++) {
+        const cell = row.insertCell();
+        cell.appendChild(document.createTextNode('x' + i));
+    }
+    const cellNormaDos = row.insertCell();
+    const cellNormaInfinito = row.insertCell();
+
+    cellNormaDos.appendChild(document.createTextNode('norma-2'));
+    cellNormaInfinito.appendChild(document.createTextNode('norma-infinito'));
+
+    // body
+    for (let i = 0; i < iteraciones.length; i++) {
+        const row = tablaResultados.insertRow();
+        const datosConNormas = obtenerDatosConNormas(iteraciones, i, datosGlobales.decimales);
+
+        for (let j = 0; j < datosConNormas.length; j++) {
+            const cell = row.insertCell();
+            const numero = datosConNormas[j].toDecimalPlaces(decimales).toString();
+            const contenido = document.createTextNode(numero);
+            cell.appendChild(contenido);
+        }
+    }
+
+    elemPadre.appendChild(tablaResultados);
+    elemPadre.style.display = "block";
 
 }
 
 function mostrarNormas(normas) {
-    const elemPadre = document.getElementById('wrapTabla');
+    const elemPadre = document.getElementById('normas');
+    elemPadre.innerHTML = '';
 
     const elemUno = document.createElement('p');
     const elemDos = document.createElement('p');
