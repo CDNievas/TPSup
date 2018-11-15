@@ -247,10 +247,15 @@ function crearTablaResultados(iteraciones, decimales) {
     // header
     const head = tablaResultados.createTHead();
     const row = head.insertRow();
-    for (let i = 0; i < iteraciones[0].length; i++) {
+    const cellNumeroIteracion = row.insertCell();
+    cellNumeroIteracion.appendChild(document.createTextNode('i'));
+
+    debugger;
+    for (let i = 0; i < datosGlobales.matrices.incognitas.length; i++) {
         const cell = row.insertCell();
-        cell.appendChild(document.createTextNode('x' + i));
+        cell.appendChild(document.createTextNode(datosGlobales.matrices.incognitas[i]));
     }
+
     const cellNormaDos = row.insertCell();
     const cellNormaInfinito = row.insertCell();
 
@@ -263,6 +268,7 @@ function crearTablaResultados(iteraciones, decimales) {
         const row = body.insertRow();
         const datosConNormas = obtenerDatosConNormas(iteraciones, i, datosGlobales.decimales);
 
+        row.insertCell().appendChild(document.createTextNode(i));
         for (let j = 0; j < datosConNormas.length; j++) {
             const cell = row.insertCell();
             const numero = datosConNormas[j].toDecimalPlaces(decimales).toString();
