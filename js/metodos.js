@@ -109,7 +109,9 @@ function alcanzaCota(a, b, c) {
 // COSAS VIEJAS
 
 // TODO: eliminar?
-function metodoGaussSeidelConDecimal(coeficientes, termInd, inicial, cota, decimales) {
+function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
+    const coeficientes = matriz.coeficientes;
+	const termInd = matriz.termInd;
 
     const inversaInferior = numeric.inv(convertirMatriz(diagonalConTriangularInferior(coeficientes)));
      
