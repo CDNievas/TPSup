@@ -71,20 +71,6 @@ function inversaDiagonal(matriz) {
 	return resultado;
 }
 
-function triangularSuperior(matriz) {
-    var resultado = new Array(matriz.length);
-
-    for(let i = 0; i < matriz.length; i++) {
-        resultado[i] = new Array(matriz[0].length);
-
-        for(let j = 0; j < matriz[0].length; j++) {
-            if (i >= j) resultado[i][j] = new Decimal(0);
-            else resultado[i][j] = new Decimal(matriz[i][j]);
-        }
-    }
-	return resultado;
-}
-
 function menosTriangulares(matriz) {
     var resultado = new Array(matriz.length);
 
@@ -99,19 +85,6 @@ function menosTriangulares(matriz) {
 	return resultado;
 }
 
-function sumarMatrices(m1, m2) {
-    var resultado = new Array(m1.length);
-
-    for(let i = 0; i < m1.length; i++) {
-        resultado[i] = new Array(m1[0].length);
-
-        for(let j = 0; j < m1[0].length; j++) {
-			resultado[i][j] = new Decimal(m1[i][j]).plus(new Decimal(m2[i][j]));
-        }
-    }
-	return resultado;
-}
-
 function menosTriangularSuperior(matriz) {
     var resultado = new Array(matriz.length);
 
@@ -121,6 +94,52 @@ function menosTriangularSuperior(matriz) {
         for(let j = 0; j < matriz[0].length; j++) {
             if (i >= j) resultado[i][j] = new Decimal(0);
             else resultado[i][j] = new Decimal(matriz[i][j]).negated();
+        }
+    }
+	return resultado;
+}
+
+function restarVectores(vector1,vector0) {
+    let resultado = [];
+
+    if(vector0.length === vector1.length){
+        for(let i = 0; i < vector1.length; i++) {
+           resultado[i]= new Decimal(vector1[i]).minus(new Decimal(vector0[i]));
+        }
+    }
+    return resultado;
+}
+
+function sumarVectores(vector1,vector0) {
+    let resultado = [];
+
+    if(vector0.length === vector1.length){
+        for(let i = 0; i < vector1.length; i++) {
+           resultado[i]= new Decimal(vector1[i]).plus(new Decimal(vector0[i]));
+        }
+    }
+    return resultado;
+}
+
+function maxDeVector(vector) {
+	let result = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		result = Decimal.max(result, new Decimal(vector[i])).toNumber();
+	}
+	return result;
+}
+
+// COSAS VIEJAS
+
+function triangularSuperior(matriz) {
+    var resultado = new Array(matriz.length);
+
+    for(let i = 0; i < matriz.length; i++) {
+        resultado[i] = new Array(matriz[0].length);
+
+        for(let j = 0; j < matriz[0].length; j++) {
+            if (i >= j) resultado[i][j] = new Decimal(0);
+            else resultado[i][j] = new Decimal(matriz[i][j]);
         }
     }
 	return resultado;
@@ -154,32 +173,15 @@ function triangularInferior(matriz) {
 	return resultado;
 }
 
-function diferenciaVectorialDecimal(vector1,vector0){
-    let resultado = [];
+function sumarMatrices(m1, m2) {
+    var resultado = new Array(m1.length);
 
-    if(vector0.length === vector1.length){
-        for(let i = 0; i < vector1.length; i++) {
-           resultado[i]= new Decimal(vector1[i]).minus(new Decimal(vector0[i]));
+    for(let i = 0; i < m1.length; i++) {
+        resultado[i] = new Array(m1[0].length);
+
+        for(let j = 0; j < m1[0].length; j++) {
+			resultado[i][j] = new Decimal(m1[i][j]).plus(new Decimal(m2[i][j]));
         }
     }
-    return resultado;
-}
-
-function sumarVectores(vector1,vector0){
-    let resultado = [];
-
-    if(vector0.length === vector1.length){
-        for(let i = 0; i < vector1.length; i++) {
-           resultado[i]= new Decimal(vector1[i]).plus(new Decimal(vector0[i]));
-        }
-    }
-    return resultado;
-}
-
-function maxDeVector(vector) {
-	let result = new Decimal(0);
-	for(let i = 0; i < vector.length; i++) {
-		result = Decimal.max(result, new Decimal(vector[i])).toNumber();
-	}
-	return result;
+	return resultado;
 }

@@ -15,6 +15,17 @@ function metodoJacobiConDecimal(matriz, inicial, cota, decimales) {
     return iterarValores(inicial, cota, decimales, T_Jacobi, C_Jacobi);
 }
 
+function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
+    const coeficientes = matriz.coeficientes;
+	const termInd = matriz.termInd;
+
+    const inversaInferior = numeric.inv(convertirMatriz(diagonalConTriangularInferior(coeficientes)));
+     
+    const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, menosTriangularSuperior(coeficientes));
+    const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
+
+    return iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
+}
 
 function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo) {
     const iteraciones = [];
@@ -36,12 +47,12 @@ function siguienteValorDecimal(valor, T_Metodo, C_Metodo) {
 }
 
 function alcanzaCotaDos(sig, actual, cota) {
-    let d = diferenciaVectorialDecimal(sig, actual);
+    let d = restarVectores(sig, actual);
     return normaDosVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
 }
 
 function alcanzaCotaInf(sig, actual, cota) {
-    let d = diferenciaVectorialDecimal(sig, actual);
+    let d = restarVectores(sig, actual);
     return normaInfVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
 }
 
@@ -65,6 +76,9 @@ function convertirMatriz(matriz) {
     return result;
 }
 
+// COSAS VIEJAS
+
+// TODO: eliminar?
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
     const iteraciones = [];
 
@@ -81,6 +95,7 @@ function metodoGaussSeidel(matriz, inicial, cota, decimales) {
 
 }
 
+// TODO: eliminar?
 function siguienteValorGaussSeidel(matriz, inicial) {
     let iterativo = [];
 
@@ -99,28 +114,13 @@ function siguienteValorGaussSeidel(matriz, inicial) {
     return iterativo;
 }
 
+// TODO: eliminar?
 function alcanzaCota(a, b, c) {
     let d = diferenciaVectorial(a, b);
     var y = 0, i = d.length;
     while (i--) y += d[i] * d[i];
     return Math.sqrt(y) < new Decimal(c);
 }
-
-// COSAS VIEJAS
-
-// TODO: eliminar?
-function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
-    const coeficientes = matriz.coeficientes;
-	const termInd = matriz.termInd;
-
-    const inversaInferior = numeric.inv(convertirMatriz(diagonalConTriangularInferior(coeficientes)));
-     
-    const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, menosTriangularSuperior(coeficientes));
-    const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
-
-    iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
-}
-
 
 // TODO: eliminar?
 function metodoJacobi(matriz, inicial, cota, decimales) {
