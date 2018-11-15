@@ -10,7 +10,7 @@ function obtenerDatosConNormas(iteraciones, indice, decimales) {
     const a = iteraciones[indice];
     const b = indice === 0 ? [0, 0, 0] : iteraciones[indice - 1];
 
-    let diferencia = diferenciaVectorialDecimal(a, b);
+    let diferencia = restarVectores(a, b);
     const normas = {
         dos: normaDosVectorialDecimal(diferencia).toDecimalPlaces(decimales),
         inf: normaInfVectorialDecimal(diferencia).toDecimalPlaces(decimales)
@@ -31,7 +31,7 @@ function normaInfinitoMatriz(coeficientes) {
         resultado = Decimal.max(resultado, sumaFila);
     }
 
-    return resultado.valueOf();
+    return resultado;
 }
 
 function normaUnoMatriz(coeficientes) {
@@ -46,7 +46,7 @@ function normaUnoMatriz(coeficientes) {
         resultado = Decimal.max(resultado, sumaColumna);
     }
 
-    return resultado.valueOf();
+    return resultado;
 }
 
 function normaDosMatriz(coeficientes) {
@@ -54,29 +54,9 @@ function normaDosMatriz(coeficientes) {
 
     var autovalorMaximo = maxDeVector((numeric.eig(convertirMatriz(matricesMult))).lambda.x);
 
-    var resultado = Math.sqrt(autovalorMaximo);
+    var resultado = Decimal.sqrt(autovalorMaximo);
 
     return resultado;
-}
-
-function diferenciaVectorial(vector1, vector0) {
-    let resultado = [];
-
-    if (vector0.length === vector1.length) {
-        for (let i = 0; i < vector1.length; i++) {
-            resultado[i] = new Decimal(vector1[i]) - new Decimal(vector0[i]);
-        }
-    }
-
-    return resultado;
-}
-
-function maxDeVector(vector) {
-    let result = new Decimal(0);
-    for (let i = 0; i < vector.length; i++) {
-        result = Decimal.max(result, new Decimal(vector[i])).toNumber();
-    }
-    return result;
 }
 
 function normaDosVectorialDecimal(vector) {

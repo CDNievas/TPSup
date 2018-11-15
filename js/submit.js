@@ -11,7 +11,6 @@ let datosGlobales = null;
 */
 
 function submit() {
-    debugger;
     if (datosGlobales === null) return;
 
     const metodo = getMetodo();
