@@ -75,26 +75,3 @@ function normaInfVectorialDecimal(vector) {
     }
     return result;
 }
-
-// COSAS VIEJAS
-// Ya no se usa. Se usa restarVectores()
-function diferenciaVectorial(vector1, vector0) {
-    let resultado = [];
-
-    if (vector0.length === vector1.length) {
-        for (let i = 0; i < vector1.length; i++) {
-            resultado[i] = new Decimal(vector1[i]) - new Decimal(vector0[i]);
-        }
-    }
-
-    return resultado;
-}
-
-// Esta en operaciones.js
-function maxDeVector(vector) {
-    let result = new Decimal(0);
-    for (let i = 0; i < vector.length; i++) {
-        result = Decimal.max(result, new Decimal(vector[i])).toNumber();
-    }
-    return result;
-}
