@@ -23,7 +23,7 @@ function iterarValores(inicial, cota, decimales, T_Metodo, C_Metodo)
 {
     let siguiente_valor = siguienteValorDecimal(inicial, T_Metodo, C_Metodo);
 
-    while(!alcanzaCotaDecimal(siguiente_valor, inicial, cota)) {
+    while(!alcanzaCotaDos(siguiente_valor, inicial, cota) || !alcanzaCotaInf(siguiente_valor, inicial, cota)) {
         inicial = siguiente_valor;
         siguiente_valor = siguienteValorDecimal(siguiente_valor, T_Metodo, C_Metodo);
         console.log(convertirVectorConDecimales(siguiente_valor, decimales));
@@ -35,9 +35,14 @@ function siguienteValorDecimal(valor, T_Metodo, C_Metodo)
     return sumarVectores(multiplicarMatrizPorVector(T_Metodo, valor), C_Metodo);
 }
 
-function alcanzaCotaDecimal(sig, actual, cota){
+function alcanzaCotaDos(sig, actual, cota){
     let d = diferenciaVectorialDecimal(sig, actual);
-    return normaVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
+    return normaDosVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
+}
+
+function alcanzaCotaInf(sig, actual, cota) {
+	let d = diferenciaVectorialDecimal(sig, actual);
+	return normaInfVectorialDecimal(d).lessThanOrEqualTo(new Decimal(cota));
 }
 
 function convertirVectorConDecimales(vector, decimales) {

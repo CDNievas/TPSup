@@ -1,4 +1,4 @@
-function normaInfinito(coeficientes) {
+function normaInfinitoMatriz(coeficientes) {
 	const coeficientes = matriz.coeficientes;
 
     let resultado = new Decimal(0);
@@ -15,7 +15,7 @@ function normaInfinito(coeficientes) {
     return resultado.valueOf();
 }
 
-function normaUno(coeficientes) {
+function normaUnoMatriz(coeficientes) {
 	const coeficientes = matriz.coeficientes;
 
     let resultado = new Decimal(0);
@@ -30,6 +30,16 @@ function normaUno(coeficientes) {
     }
 	
     return resultado.valueOf();
+}
+
+function normaDosMatriz(coeficientes) {
+    var matricesMult = multiplicarMatrizPorMatriz(transpuesta(coeficientes), coeficientes);
+
+    var autovalorMaximo = maxDeVector((numeric.eig(convertirMatriz(matricesMult))).lambda.x);
+
+    var resultado = Math.sqrt(autovalorMaximo);
+	
+	return resultado;
 }
 
 function normaVectorial(vector){
@@ -48,7 +58,7 @@ function diferenciaVectorial(vector1,vector0){
     return resultado;
 }
 
-  function maxDeVector(vector) {
+function maxDeVector(vector) {
 	let result = new Decimal(0);
 	for(let i = 0; i < vector.length; i++) {
 		result = Decimal.max(result, new Decimal(vector[i])).toNumber();
@@ -56,12 +66,19 @@ function diferenciaVectorial(vector1,vector0){
 	return result;
 }
 
-  function normaDos(coeficientes) {
-    var matricesMult = multiplicarMatrizPorMatriz(transpuesta(coeficientes), coeficientes);
-
-    var autovalorMaximo = maxDeVector((numeric.eig(convertirMatriz(matricesMult))).lambda.x);
-
-    var resultado = Math.sqrt(autovalorMaximo);
+function normaDosVectorialDecimal(vector) {
+	var suma = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		suma = suma.plus(new Decimal(vector[i]).toPower(2))
+	}
 	
-	return resultado;
+	return Decimal.sqrt(suma);
+}
+
+function normaInfVectorialDecimal(vector) {
+	let result = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		result = Decimal.max(result, new Decimal(vector[i]).abs());
+	}
+	return result;
 }

@@ -165,15 +165,6 @@ function diferenciaVectorialDecimal(vector1,vector0){
     return resultado;
 }
 
-function normaVectorialDecimal(vector) {
-	var suma = new Decimal(0);
-	for(let i = 0; i < vector.length; i++) {
-		suma = suma.plus(new Decimal(vector[i]).toPower(2))
-	}
-	
-	return Decimal.sqrt(suma);
-}
-
 function sumarVectores(vector1,vector0){
     let resultado = new Array();
 
@@ -183,4 +174,12 @@ function sumarVectores(vector1,vector0){
         }
     }
     return resultado;
+}
+
+function maxDeVector(vector) {
+	let result = new Decimal(0);
+	for(let i = 0; i < vector.length; i++) {
+		result = Decimal.max(result, new Decimal(vector[i])).toNumber();
+	}
+	return result;
 }
