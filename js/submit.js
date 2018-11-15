@@ -12,19 +12,21 @@ function submit() {
 function procesarSubmit() {
 
     // DOM
-    var metodo = document.querySelector('input[name="metodo"]:checked').value;
-    var norma = document.querySelector('input[name="norma"]:checked').value;
-    var archivo = document.getElementById("archivo").files;
-    var vectInicial = document.getElementById("vectInicial").value;
-    var cantDec = document.getElementById("cantDec").value;
-    var cotaError = document.getElementById("cotaError").value;
+    let metodo = document.querySelector('input[name="metodo"]:checked').value;
+    let norma = document.querySelector('input[name="norma"]:checked').value;
+    let archivo = document.getElementById("archivo").files;
+    let vectInicial = document.getElementById("vectInicial").value;
+    let cantDec = document.getElementById("cantDec").value;
+    let cotaError = document.getElementById("cotaError").value;
+
+    // convierto string con lista de valores a un vector
+    vectInicial = vectInicial.split(',').map(Number);
 
     // Checkea muchas cosas xddd
-    var comp = comprobacionesAristocraticas(metodo,norma,archivo,cantDec,cotaError);
-    if (comp.codigo == -1){
+    let comp = comprobacionesAristocraticas(metodo,norma,archivo,cantDec,cotaError);
+    if (comp.codigo === -1){
         printError(comp.msg);
     } else {
-
         // Procesa el archivo
         procesarArchivo(archivo[0], function (matrices) {
 
@@ -41,18 +43,20 @@ function procesarSubmit() {
             crearTabla(matrices);
 
             // Ejecuta calculo norma
-            var rdoNorma;
+            let rdoNorma;
+
+            const coeficientes = matrices.coeficientes;
             if (norma === "norma_1"){
-                rdoNorma = normaUno(matrices);
+                rdoNorma = normaUnoMatriz(coeficientes);
             } else if (norma === "norma_2") {
-                rdoNorma = normaDos(matrices);
+                rdoNorma = normaDosMatriz(coeficientes);
             } else {
-                rdoNorma = normaInfinito(matrices);
+                rdoNorma = normaInfinitoMatriz(coeficientes);
             }
 
             // Ejecuta metodo/solucion
             if (metodo === "jacobi") {
-                metodoJacobi(matrices);
+                metodoJacobi(matrices, vectInicial, cotaError, cantDec);
             } else {
                 metodoGaussSeidel(matrices);
             }
@@ -68,7 +72,7 @@ function comprobacionesAristocraticas(metodo, norma, archivo, cantDec, cotaError
 
     if(metodo !== "jacobi" && metodo !== "gaussSeidel"){
         return {codigo: -1, msg: "No selecciono un metodo valido"};
-    } else if (norma !== "norma_1" && norma !== "norma_2" && norma !== "normaInfinito"){
+    } else if (norma !== "norma_1" && norma !== "norma_2" && norma !== "norma_infinito"){
         return {codigo: -1, msg: "No selecciono una norma valida"};
     } else if (cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null || cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null){
         return {codigo: -1, msg: "Un campo de texto contenia datos en un formato distinto al establecido"};

@@ -1,6 +1,4 @@
 function normaInfinitoMatriz(coeficientes) {
-	const coeficientes = matriz.coeficientes;
-
     let resultado = new Decimal(0);
 	
     for(let i = 0; i < coeficientes[0].length; i++) {
@@ -16,8 +14,6 @@ function normaInfinitoMatriz(coeficientes) {
 }
 
 function normaUnoMatriz(coeficientes) {
-	const coeficientes = matriz.coeficientes;
-
     let resultado = new Decimal(0);
 	
     for(let j = 0; j < coeficientes[0].length; j++) {

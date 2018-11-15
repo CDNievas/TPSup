@@ -38,7 +38,7 @@ function transpuesta(matriz) {
         result[i] = new Array(matriz[0].length);
 
         for (let j = 0; j < matriz[0].length; j++) {
-            if (i == j) result[i][j] = new Decimal (matriz [i][j]);
+            if (i === j) result[i][j] = new Decimal (matriz [i][j]);
             else result[i][j] = new Decimal(matriz [j][i]);
         }
     }
@@ -155,7 +155,7 @@ function triangularInferior(matriz) {
 }
 
 function diferenciaVectorialDecimal(vector1,vector0){
-    let resultado = new Array();
+    let resultado = [];
 
     if(vector0.length === vector1.length){
         for(let i = 0; i < vector1.length; i++) {
@@ -166,7 +166,7 @@ function diferenciaVectorialDecimal(vector1,vector0){
 }
 
 function sumarVectores(vector1,vector0){
-    let resultado = new Array();
+    let resultado = [];
 
     if(vector0.length === vector1.length){
         for(let i = 0; i < vector1.length; i++) {
