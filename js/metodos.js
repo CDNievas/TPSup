@@ -118,7 +118,7 @@ function metodoGaussSeidelConDecimal(matriz, inicial, cota, decimales) {
     const T_GaussSeidel = multiplicarMatrizPorMatriz(inversaInferior, menosTriangularSuperior(coeficientes));
     const C_GaussSeidel = multiplicarMatrizPorVector(inversaInferior, termInd);
 
-    iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
+    return iterarValores(inicial, cota, decimales, T_GaussSeidel, C_GaussSeidel);
 }
 
 

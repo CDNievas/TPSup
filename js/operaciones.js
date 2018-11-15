@@ -18,6 +18,7 @@ function multiplicarMatrizPorMatriz(matriz1, matriz2) {
 }
 
 function multiplicarMatrizPorVector(matriz, vector) {
+    debugger;
     var result = new Array(matriz.length);
 	
     for (let i = 0; i < result.length; i++) {

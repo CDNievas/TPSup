@@ -65,16 +65,17 @@ div.form button {
 div.wrapTabla {
     display: none;
     padding: 20px;
+    padding-top: 0;
     margin: 20px 0 20px 0;
     background: #F1F1F1;
     border-radius: 5px;
 }
 
-table.tablaMatriz {
+table {
     border-collapse: collapse;
 }
 
-table.tablaMatriz td {
+table td {
     border: 1px solid black;
     padding: 0.2rem;
 }
@@ -82,4 +83,16 @@ table.tablaMatriz td {
 #resolvedor {
     margin-top: 20px;
     display: none;
+}
+
+thead {
+    font-weight: bold;
+}
+
+table {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
 }

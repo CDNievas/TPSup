@@ -2,7 +2,6 @@ let datosGlobales = null;
 
 /*
 {
-    metodo,
     matrices,
     inicial,
     decimales,
@@ -12,27 +11,24 @@ let datosGlobales = null;
 */
 
 function submit() {
+    debugger;
     if (datosGlobales === null) return;
 
-    let iteraciones = [];
-    if (datosGlobales.metodo === 'jacobi') {
-        iteraciones = jacobi(datosGlobales);
-    } else if (datosGlobales.metodo === 'gaussSeidel') {
-        iteraciones = gaussSeidel(datosGlobales);
-        // HACK
-        iteraciones = iteraciones.map(iteracion =>
-            iteracion.map(numero =>
-                new Decimal(numero)
-        ))
-    }
+    const metodo = getMetodo();
 
-    debugger;
+    let iteraciones = [];
+    if (metodo === 'jacobi') {
+        iteraciones = jacobi(datosGlobales);
+    } else if (metodo === 'gaussSeidel') {
+        iteraciones = gaussSeidel(datosGlobales);
+    }
 
     iteraciones =
         iteraciones.map(iteracion =>
             iteracion.map(numero =>
                 numero.toDecimalPlaces(datosGlobales.decimales)));
 
+    limpiarTabla('tablaResultados');
     crearTablaResultados(iteraciones);
 }
 
@@ -42,6 +38,8 @@ function validar() {
 
         let normas = obtenerTodasLasNormas(matrices.coeficientes);
 
+        limpiarTabla('tablaMatriz');
+        limpiarTabla('tablaResultados');
         crearTablaMatrizIngresada(matrices);
         mostrarNormas(normas);
         setResolvedorVisibility(true);
@@ -52,14 +50,14 @@ function validar() {
 
 function leerDatos(callback) {
     // let norma = document.querySelector('input[name="norma"]:checked').value;
-    const metodo = document.querySelector('input[name="metodo"]:checked').value;
     const archivo = document.getElementById("archivo").files;
     const vectInicial = document.getElementById("vectInicial").value;
     const cantDec = document.getElementById("cantDec").value;
     const cotaError = document.getElementById("cotaError").value;
 
     procesarArchivo(archivo[0], function (matrices) {
-        const comp = comprobacionesAristocraticas(metodo, archivo, cantDec, cotaError);
+        const comp = comprobacionesAristocraticas(archivo, cantDec, cotaError);
+        const inicial = vectInicial.split(',').map(Number);
 
         if (comp.codigo === -1) {
             printError(comp.msg);
@@ -71,7 +69,10 @@ function leerDatos(callback) {
             return;
         }
 
-        const inicial = vectInicial.split(',').map(Number);
+        if (inicial.length !== matrices.coeficientes[0].length) {
+            printError('El vector inicial no tiene la misma longitud que la matriz.');
+            return;
+        }
 
         // no puede ser un Decimal, tiene que ser Number.
         // igual es entero, no hay problemas de precision.
@@ -80,7 +81,6 @@ function leerDatos(callback) {
         const cota = new Decimal(cotaError).toDecimalPlaces(decimales);
 
         const datos = {
-            metodo,
             matrices,
             inicial,
             decimales,
@@ -91,24 +91,19 @@ function leerDatos(callback) {
     })
 }
 
-function comprobacionesAristocraticas(metodo, norma, archivo, cantDec, cotaError) {
-    // HACK
-    norma = 'norma_1';
-
-    if (metodo !== "jacobi" && metodo !== "gaussSeidel") {
-        return {codigo: -1, msg: "No selecciono un metodo valido"};
-    } else if (norma !== "norma_1" && norma !== "norma_2" && norma !== "norma_infinito") {
-        return {codigo: -1, msg: "No selecciono una norma valida"};
-    } else if (cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null || cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null) {
+function comprobacionesAristocraticas(archivo, cantDec, cotaError) {
+    if (cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null || cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null) {
         return {
             codigo: -1,
             msg: "Un campo de texto contenia datos en un formato distinto al establecido"
         };
-    } else if (archivo.length !== 1) {
-        return {codigo: -1, msg: "Error en la carga del archivo"};
-    } else {
-        return {codigo: 0, msg: ""};
     }
+
+    if (archivo.length !== 1) {
+        return {codigo: -1, msg: "Error en la carga del archivo"};
+    }
+
+    return {codigo: 0, msg: ""};
 
 }
 
@@ -132,7 +127,6 @@ function procesarArchivo(archivo, callback) {
 }
 
 function parserCSV(csv) {
-
     csv = csv.split("\n").map(function (row) {
         return row.split(",");
     });
@@ -189,21 +183,50 @@ function parserCSV(csv) {
 
 }
 
+function limpiarTabla(id) {
+    // si no existe no hago nada
+    if (document.getElementById(id) === null) return;
+
+    // si existe borro lo que este en el parent
+    let parent = document.getElementById(id).parentElement;
+    parent.innerHTML = '';
+}
+
+function obtenerTabla(id, title, parent) {
+    limpiarTabla(id);
+
+    // titulo
+    const titulo = document.createElement('h2');
+    titulo.textContent = title;
+    parent.append(titulo);
+
+    tabla = document.createElement("table");
+    tabla.id = id;
+    parent.append(tabla);
+
+    return tabla;
+}
+
 function crearTablaMatrizIngresada(datos) {
     const elemPadre = document.getElementById('wrapTabla');
-    let tablaMatriz = document.getElementById("tablaMatriz");
+    let tablaMatriz = obtenerTabla('tablaMatriz', 'Matriz Cargada', elemPadre);
 
-    if (tablaMatriz === null) {
-        tablaMatriz = document.createElement("table");
-        tablaMatriz.id = "tablaMatriz";
-        tablaMatriz.classList.add("tablaMatriz");
-    } else {
-        tablaMatriz.innerHTML = '';
-    }
-
-    const row = tablaMatriz.insertRow();
+    // header
+    const head = tablaMatriz.createTHead();
+    const row = head.insertRow();
     for (let i = 0; i < datos.coeficientes.length; i++) {
-        const row = tablaMatriz.insertRow();
+        const cell = row.insertCell();
+        cell.appendChild(document.createTextNode('x' + i));
+    }
+    const cellNormaDos = row.insertCell();
+    const cellNormaInfinito = row.insertCell();
+
+    cellNormaDos.appendChild(document.createTextNode('variable'));
+    cellNormaInfinito.appendChild(document.createTextNode('término independiente'));
+
+    const body = tablaMatriz.createTBody();
+    for (let i = 0; i < datos.coeficientes.length; i++) {
+        const row = body.insertRow();
         const datosArray = datos.coeficientes[i].concat(datos.incognitas[i], datos.termInd[i]);
 
         for (let j = 0; j < datosArray.length; j++) {
@@ -220,15 +243,7 @@ function crearTablaMatrizIngresada(datos) {
 
 function crearTablaResultados(iteraciones, decimales) {
     const elemPadre = document.getElementById('resultado');
-    let tablaResultados = document.getElementById('tablaResultados');
-
-    if (tablaResultados === null) {
-        tablaResultados = document.createElement('table');
-        tablaResultados.id = 'tablaResultados';
-        tablaResultados.classList.add('tablaMatriz');
-    } else {
-        tablaResultados.innerHTML = '';
-    }
+    let tablaResultados = obtenerTabla('tablaResultados', 'Iteraciones', elemPadre);
 
     // header
     const head = tablaResultados.createTHead();
@@ -244,8 +259,9 @@ function crearTablaResultados(iteraciones, decimales) {
     cellNormaInfinito.appendChild(document.createTextNode('norma-infinito'));
 
     // body
+    const body = tablaResultados.createTBody();
     for (let i = 0; i < iteraciones.length; i++) {
-        const row = tablaResultados.insertRow();
+        const row = body.insertRow();
         const datosConNormas = obtenerDatosConNormas(iteraciones, i, datosGlobales.decimales);
 
         for (let j = 0; j < datosConNormas.length; j++) {
@@ -262,16 +278,26 @@ function crearTablaResultados(iteraciones, decimales) {
 }
 
 function mostrarNormas(normas) {
+    function generarElemento(titulo, contenido) {
+        const elementoTitulo = document.createElement('strong');
+        const elementoContenido = document.createElement('p');
+
+        elementoTitulo.textContent = titulo;
+        elementoContenido.textContent = contenido;
+
+        const contenedor = document.createElement('div');
+        contenedor.appendChild(elementoTitulo);
+        contenedor.appendChild(elementoContenido);
+
+        return contenedor;
+    }
+
     const elemPadre = document.getElementById('normas');
     elemPadre.innerHTML = '';
 
-    const elemUno = document.createElement('p');
-    const elemDos = document.createElement('p');
-    const elemInf = document.createElement('p');
-
-    elemUno.textContent = "Norma Uno: " + normas.uno;
-    elemDos.textContent = "Norma Dos: " + normas.dos;
-    elemInf.textContent = "Norma Infinito: " + normas.inf;
+    const elemUno = generarElemento("Norma Uno: ", normas.uno);
+    const elemDos = generarElemento("Norma Dos: ", normas.dos);
+    const elemInf = generarElemento("Norma Infinito: ", normas.inf);
 
     elemPadre.appendChild(elemUno);
     elemPadre.appendChild(elemDos);
@@ -286,6 +312,10 @@ function setResolvedorVisibility(visible) {
     } else {
         resolvedor.style.display = 'none';
     }
+}
+
+function getMetodo() {
+    return document.querySelector('input[name="metodo"]:checked').value;
 }
 
 function printError(msg) {
