@@ -6,11 +6,12 @@ function obtenerTodasLasNormas(coeficientes) {
     };
 }
 
-function obtenerDatosConNormas(iteraciones, indice, decimales) {
+function obtenerDatosConNormas(iteraciones, indice, decimales, inicial) {
+    debugger;
     const a = iteraciones[indice];
-    const b = indice === 0 ? [0, 0, 0] : iteraciones[indice - 1];
+    const b = indice === 0 ? inicial : iteraciones[indice - 1];
 
-    let diferencia = restarVectores(a, b);
+    let diferencia = restarVectores(b, a);
     const normas = {
         dos: normaDosVectorialDecimal(diferencia).toDecimalPlaces(decimales),
         inf: normaInfVectorialDecimal(diferencia).toDecimalPlaces(decimales)

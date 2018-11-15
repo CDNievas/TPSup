@@ -250,7 +250,6 @@ function crearTablaResultados(iteraciones, decimales) {
     const cellNumeroIteracion = row.insertCell();
     cellNumeroIteracion.appendChild(document.createTextNode('i'));
 
-    debugger;
     for (let i = 0; i < datosGlobales.matrices.incognitas.length; i++) {
         const cell = row.insertCell();
         cell.appendChild(document.createTextNode(datosGlobales.matrices.incognitas[i]));
@@ -266,7 +265,7 @@ function crearTablaResultados(iteraciones, decimales) {
     const body = tablaResultados.createTBody();
     for (let i = 0; i < iteraciones.length; i++) {
         const row = body.insertRow();
-        const datosConNormas = obtenerDatosConNormas(iteraciones, i, datosGlobales.decimales);
+        const datosConNormas = obtenerDatosConNormas(iteraciones, i, datosGlobales.decimales, datosGlobales.inicial);
 
         row.insertCell().appendChild(document.createTextNode(i));
         for (let j = 0; j < datosConNormas.length; j++) {
