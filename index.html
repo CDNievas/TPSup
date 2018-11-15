@@ -1,89 +1,100 @@
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>TP Superior 2018</title>
-		<link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="./styles.css">
-		<script src="deps/decimal.min.js"></script>
-		<script src="deps/numeric.min.js"></script>
-		<script src="js/diagonal.js"></script>
-		<script src="js/normas.js"></script>
-		<script src="js/metodos.js"></script>
-		<script src="js/operaciones.js"></script>
-		<script src="js/submit.js"></script>
+<head>
+    <meta charset="utf-8"/>
+    <title>TP Superior 2018</title>
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <script src="deps/decimal.min.js"></script>
+    <script src="deps/numeric.min.js"></script>
+    <script src="js/diagonal.js"></script>
+    <script src="js/normas.js"></script>
+    <script src="js/metodos.js"></script>
+    <script src="js/operaciones.js"></script>
+    <script src="js/submit.js"></script>
 
-	</head>
-	<body>
+</head>
+<body>
 
-		<div class="wrap">
+<div class="wrap">
 
-			<div class="title">
-				<p>SIEL</p>
-			</div>
+    <div class="title">
+        <p>SIEL</p>
+    </div>
 
-			<div class="form">
+    <div class="form">
 
-				<div class="row">
-					<div class="col">
-						<label for="archivo">Archivo CSV</label><br>
-						<input type="file" id="archivo" name="archivo" accept=".csv"/><br>
-					</div>
-					<div class="col">
-						<label for="vectInicial">Vector inicial</label><br>
-						<input type="text" id="vectInicial" name="vectInicial" placeholder="0, 1.23, -1, -2.3">
-					</div>
-					<div class="col">
-						<label for="cantDec">Cant. decimales</label><br>
-						<input type="text" id="cantDec" name="cantDec" placeholder="0">
-					</div>
-					<div class="col">
-						<label for="cotaError">Cota de error</label><br>
-						<input type="text" id="cotaError" name="cotaError" placeholder="1">
-					</div>
-				</div>
+        <div class="row">
+            <div class="col">
+                <label for="archivo">Archivo CSV</label><br>
+                <input type="file" id="archivo" name="archivo" accept=".csv"/>
+            </div>
+            <div class="col">
+                <label for="vectInicial">Vector inicial</label><br>
+                <input type="text" id="vectInicial" name="vectInicial"
+                       placeholder="0, 1.23, -1, -2.3">
+            </div>
+            <div class="col">
+                <label for="cantDec">Cant. decimales</label><br>
+                <input type="text" id="cantDec" name="cantDec" placeholder="0">
+            </div>
+            <div class="col">
+                <label for="cotaError">Cota de error</label><br>
+                <input type="text" id="cotaError" name="cotaError"
+                       placeholder="1">
+            </div>
 
-				<div class="row">
-					<fieldset id="fieldset_metodo">
-						<legend>Elegir método de resolución</legend>
+            <button type="button" onclick="validar()">Ingresar</button>
+        </div>
 
-						<div>
-							<input id="metodo_jacobi" type="radio" name="metodo" value="jacobi" checked/>
-							<label for="metodo_jacobi">Método de Jacobi</label>
-						</div>
 
-						<div>
-							<input id="metodo_gauss" type="radio" name="metodo" value="gaussSeidel"/>
-							<label for="metodo_gauss">Método de Gauss Seidel</label>
-						</div>
-					</fieldset>
+    </div>
 
-					<fieldset id="fieldset_norma">
-						<legend>Elegir norma a usar</legend>
+    <div id="resolvedor" class="form">
+        <div class="wrapTabla" id="wrapTabla"></div>
 
-						<div>
-							<input id="norma_1" type="radio" name="norma" value="norma_1" checked/>
-							<label for="norma_1">Norma 1</label>
-						</div>
+        <div class="row">
+            <fieldset id="fieldset_metodo">
+                <legend>Elegir método de resolución</legend>
 
-						<div>
-							<input id="norma_2" type="radio" name="norma" value="norma_2"/>
-							<label for="norma_2">Norma 2</label>
-						</div>
-						<div>
-							<input id="norma_infinito" type="radio" name="norma" value="norma_infinito"/>
-							<label for="norma_infinito">Norma Infinito</label>
-						</div>
-					</fieldset>
-										
-				</div>
+                <div>
+                    <input id="metodo_jacobi" type="radio" name="metodo"
+                           value="jacobi" checked/>
+                    <label for="metodo_jacobi">Método de Jacobi</label>
+                </div>
 
-				<button onclick="submit()">Resolver</button>
+                <div>
+                    <input id="metodo_gauss" type="radio" name="metodo"
+                           value="gaussSeidel"/>
+                    <label for="metodo_gauss">Método de Gauss Seidel</label>
+                </div>
+            </fieldset>
 
-			</div>
+            <fieldset id="fieldset_norma">
+                <legend>Elegir norma a usar</legend>
 
-			<div class="wrapTabla" id="wrapTabla"></div>
+                <div>
+                    <input id="norma_1" type="radio" name="norma"
+                           value="norma_1" checked/>
+                    <label for="norma_1">Norma 1</label>
+                </div>
 
-		</div>
-	</body>
+                <div>
+                    <input id="norma_2" type="radio" name="norma"
+                           value="norma_2"/>
+                    <label for="norma_2">Norma 2</label>
+                </div>
+                <div>
+                    <input id="norma_infinito" type="radio" name="norma"
+                           value="norma_infinito"/>
+                    <label for="norma_infinito">Norma Infinito</label>
+                </div>
+            </fieldset>
+
+            <button onclick="submit()">Resolver</button>
+        </div>
+    </div>
+
+</div>
+</body>
 </html>

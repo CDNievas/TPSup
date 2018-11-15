@@ -1,3 +1,11 @@
+function obtenerTodasLasNormas(coeficientes) {
+	return {
+		uno: normaUnoMatriz(coeficientes),
+		dos: normaDosMatriz(coeficientes),
+		inf: normaInfinitoMatriz(coeficientes)
+	};
+}
+
 function normaInfinitoMatriz(coeficientes) {
     let resultado = new Decimal(0);
 	

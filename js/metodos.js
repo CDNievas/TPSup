@@ -1,3 +1,12 @@
+function jacobi(datos) {
+    metodoJacobiConDecimal(datos.matrices, datos.inicial, datos.cota, datos.decimales);
+}
+
+function gaussSeidel(datos) {
+    metodoGaussSeidel(datos.matrices, datos.inicial, datos.cota, datos.decimales);
+    // TODO: ir escribiendo en la tabla
+}
+
 function metodoJacobiConDecimal(matriz, inicial, cota, decimales) {
 	const coeficientes = matriz.coeficientes;
 	const termInd = matriz.termInd;
@@ -46,10 +55,10 @@ function alcanzaCotaInf(sig, actual, cota) {
 }
 
 function convertirVectorConDecimales(vector, decimales) {
-    let resultado = new Array(vector.length);
+    let resultado = [];
     
     for (let i = 0; i < vector.length; i++) {
-        resultado[i] = parseFloat(vector[i].toFixed(decimales));
+        resultado[i] = vector[i].toNumber();
     }
     return resultado;
     }
@@ -66,8 +75,6 @@ function convertirMatriz(matriz) {
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
-  debugger;
-
     let siguiente_valor = siguienteValorGaussSeidel(matriz,inicial);
     siguiente_valor = siguiente_valor[0];
 
@@ -81,7 +88,6 @@ function metodoGaussSeidel(matriz, inicial, cota, decimales) {
     }
 
 function siguienteValorGaussSeidel(matriz, inicial) {
-    debugger;
     let iterativo = [];
 
     iterativo.unshift(inicial.slice());
@@ -134,7 +140,6 @@ function getVectorInicial(value){
 }
 
 function alcanzaCota(a,b,c){
-  debugger;
     let d = diferenciaVectorial(a,b);
     var y = 0, i = d.length;
     while (i--) y += d[i] * d[i];

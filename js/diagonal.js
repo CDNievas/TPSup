@@ -1,6 +1,4 @@
-function esDiagonalmenteDominante(matriz) {
-    const coeficientes = matriz.coeficientes;
-
+function esDiagonalmenteDominante(coeficientes) {
     let esDominante = true;
 
     // recorre matriz por filas

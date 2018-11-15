@@ -1,91 +1,108 @@
+let datosGlobales = null;
+/*
+{
+    metodo,
+    matrices,
+    inicial,
+    decimales,
+    cota,
+    norma
+}
+*/
+
 function submit() {
-    // Checkeo API Support y ejecuto
-    if (window.FileReader) {
-        console.log("Soporta FileReader");
-        procesarSubmit();
-    } else {
-        console.log("No soporta FileReader");
-        alert('La APP no soporta este navegador por favor pruebe con otro que soporte HTML5');
+    if (datosGlobales !== null) {
+        if (datosGlobales.metodo === 'jacobi') {
+            jacobi(datosGlobales);
+        } else if (datosGlobales.metodo === 'gaussSeidel') {
+            gaussSeidel(datosGlobales);
+        }
     }
 }
 
-function procesarSubmit() {
+function validar() {
+    leerDatos(function(datos) {
+        let matrices = datos.matrices;
 
-    // DOM
-    let metodo = document.querySelector('input[name="metodo"]:checked').value;
-    let norma = document.querySelector('input[name="norma"]:checked').value;
-    let archivo = document.getElementById("archivo").files;
-    let vectInicial = document.getElementById("vectInicial").value;
-    let cantDec = document.getElementById("cantDec").value;
-    let cotaError = document.getElementById("cotaError").value;
+        let normas = obtenerTodasLasNormas(matrices.coeficientes);
 
-    // convierto string con lista de valores a un vector
-    vectInicial = vectInicial.split(',').map(Number);
+        crearTabla(matrices);
+        mostrarNormas(normas);
+        setResolvedorVisibility(true);
 
-    // Checkea muchas cosas xddd
-    let comp = comprobacionesAristocraticas(metodo,norma,archivo,cantDec,cotaError);
-    if (comp.codigo === -1){
-        printError(comp.msg);
-    } else {
-        // Procesa el archivo
-        procesarArchivo(archivo[0], function (matrices) {
-
-            /* Acceso a matrices
-            coeficientes -> matrices.coeficientes
-            incognitas -> matrices.incognitas
-            independientes -> matrices.termInd
-            */
-
-            // Checkea Diagonal Dominante
-            esDiagonalmenteDominante(matrices);
-
-            // Imprime tabla
-            crearTabla(matrices);
-
-            // Ejecuta calculo norma
-            let rdoNorma;
-
-            const coeficientes = matrices.coeficientes;
-            if (norma === "norma_1"){
-                rdoNorma = normaUnoMatriz(coeficientes);
-            } else if (norma === "norma_2") {
-                rdoNorma = normaDosMatriz(coeficientes);
-            } else {
-                rdoNorma = normaInfinitoMatriz(coeficientes);
-            }
-
-            // Ejecuta metodo/solucion
-            if (metodo === "jacobi") {
-                metodoJacobi(matrices, vectInicial, cotaError, cantDec);
-            } else {
-                metodoGaussSeidel(matrices, vectInicial, cotaError, cantDec);
-            }
-
-        });
-
-    }
-
+        datosGlobales = Object.assign({}, datos, normas);
+    });
 }
 
+function leerDatos(callback) {
+    // let norma = document.querySelector('input[name="norma"]:checked').value;
+    const metodo = document.querySelector('input[name="metodo"]:checked').value;
+    const archivo = document.getElementById("archivo").files;
+    const vectInicial = document.getElementById("vectInicial").value;
+    const cantDec = document.getElementById("cantDec").value;
+    const cotaError = document.getElementById("cotaError").value;
 
-function comprobacionesAristocraticas(metodo, norma, archivo, cantDec, cotaError){
+    procesarArchivo(archivo[0], function(matrices) {
+        const comp = comprobacionesAristocraticas(metodo, archivo, cantDec, cotaError);
 
-    if(metodo !== "jacobi" && metodo !== "gaussSeidel"){
+        if (comp.codigo === -1) {
+            printError(comp.msg);
+            return;
+        }
+
+        if (!esDiagonalmenteDominante(matrices.coeficientes)) {
+            printError('La matriz no es estrictamente diagonalmente dominante');
+            return;
+        }
+
+        const inicial = vectInicial.split(',').map(Number);
+
+        // no puede ser un Decimal, tiene que ser Number.
+        // igual es entero, no hay problemas de precision.
+        const decimales = Number.parseInt(cantDec);
+
+        const cota = new Decimal(cotaError).toDecimalPlaces(decimales);
+
+        const datos = {
+            metodo,
+            matrices,
+            inicial,
+            decimales,
+            cota
+        };
+
+        callback(datos);
+    })
+}
+
+function comprobacionesAristocraticas(metodo, norma, archivo, cantDec, cotaError) {
+    // HACK
+    norma = 'norma_1';
+
+    if (metodo !== "jacobi" && metodo !== "gaussSeidel") {
         return {codigo: -1, msg: "No selecciono un metodo valido"};
-    } else if (norma !== "norma_1" && norma !== "norma_2" && norma !== "norma_infinito"){
+    } else if (norma !== "norma_1" && norma !== "norma_2" && norma !== "norma_infinito") {
         return {codigo: -1, msg: "No selecciono una norma valida"};
-    } else if (cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null || cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null){
-        return {codigo: -1, msg: "Un campo de texto contenia datos en un formato distinto al establecido"};
-    } else if (archivo.length !== 1){
+    } else if (cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null || cantDec.match(/^[+-]?\d+(\.\d+)?$/) == null) {
+        return {
+            codigo: -1,
+            msg: "Un campo de texto contenia datos en un formato distinto al establecido"
+        };
+    } else if (archivo.length !== 1) {
         return {codigo: -1, msg: "Error en la carga del archivo"};
     } else {
-        return {codigo: 0, msg:""};
+        return {codigo: 0, msg: ""};
     }
 
 }
 
-
 function procesarArchivo(archivo, callback) {
+    if (!window.FileReader) {
+        alert("Este navegador no soporta la API de FileReader. Por favor," +
+            " probar en un navegador mas moderno.")
+
+        return;
+    }
 
     var reader = new FileReader();
     reader.onloadend = function () {
@@ -93,6 +110,7 @@ function procesarArchivo(archivo, callback) {
         var structs = parserCSV(contenido);
         callback(structs)
     };
+
     reader.readAsText(archivo);
 
 }
@@ -162,7 +180,7 @@ function crearTabla(datos) {
     const elemPadre = document.getElementById('wrapTabla');
     let tablaMatriz = document.getElementById("tablaMatriz");
 
-    if(tablaMatriz === null){
+    if (tablaMatriz === null) {
         tablaMatriz = document.createElement("table");
         tablaMatriz.id = "tablaMatriz";
         tablaMatriz.classList.add("tablaMatriz");
@@ -186,6 +204,32 @@ function crearTabla(datos) {
     elemPadre.appendChild(tablaMatriz);
     elemPadre.style.display = "block";
 
+}
+
+function mostrarNormas(normas) {
+    const elemPadre = document.getElementById('wrapTabla');
+
+    const elemUno = document.createElement('p');
+    const elemDos = document.createElement('p');
+    const elemInf = document.createElement('p');
+
+    elemUno.textContent = "Norma Uno: " + normas.uno;
+    elemDos.textContent = "Norma Dos: " + normas.dos;
+    elemInf.textContent = "Norma Infinito: " + normas.inf;
+
+    elemPadre.appendChild(elemUno);
+    elemPadre.appendChild(elemDos);
+    elemPadre.appendChild(elemInf);
+}
+
+function setResolvedorVisibility(visible) {
+    const resolvedor = document.getElementById('resolvedor');
+
+    if (visible) {
+        resolvedor.style.display = 'block';
+    } else {
+        resolvedor.style.display = 'none';
+    }
 }
 
 function printError(msg) {
