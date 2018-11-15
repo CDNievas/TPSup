@@ -3,7 +3,7 @@ function jacobi(datos) {
 }
 
 function gaussSeidel(datos) {
-    metodoGaussSeidel(datos.matrices, datos.inicial, datos.cota, datos.decimales);
+    return metodoGaussSeidel(datos.matrices, datos.inicial, datos.cota, datos.decimales);
 }
 
 function metodoJacobiConDecimal(matriz, inicial, cota, decimales) {
@@ -66,15 +66,18 @@ function convertirMatriz(matriz) {
 }
 
 function metodoGaussSeidel(matriz, inicial, cota, decimales) {
-    let siguiente_valor = siguienteValorGaussSeidel(matriz, inicial);
-    siguiente_valor = siguiente_valor[0];
+    const iteraciones = [];
 
-    while (!alcanzaCota(siguiente_valor, inicial, cota)) {
-        inicial = siguiente_valor;
-        siguiente_valor = siguienteValorGaussSeidel(matriz, siguiente_valor);
-        siguiente_valor = siguiente_valor[0];
-        console.log(siguiente_valor);
+    let siguienteValor = siguienteValorGaussSeidel(matriz, inicial)[0];
+    iteraciones.push(siguienteValor);
+
+    while (!alcanzaCota(siguienteValor, inicial, cota)) {
+        inicial = siguienteValor;
+        siguienteValor = siguienteValorGaussSeidel(matriz, siguienteValor)[0];
+        iteraciones.push(siguienteValor);
     }
+
+    return iteraciones;
 
 }
 

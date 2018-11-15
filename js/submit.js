@@ -19,7 +19,14 @@ function submit() {
         iteraciones = jacobi(datosGlobales);
     } else if (datosGlobales.metodo === 'gaussSeidel') {
         iteraciones = gaussSeidel(datosGlobales);
+        // HACK
+        iteraciones = iteraciones.map(iteracion =>
+            iteracion.map(numero =>
+                new Decimal(numero)
+        ))
     }
+
+    debugger;
 
     iteraciones =
         iteraciones.map(iteracion =>
